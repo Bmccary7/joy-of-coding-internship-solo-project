@@ -1,6 +1,9 @@
+import TableContent from "./Components/TableContent";
 
 export default function Home() {
   return (
-    <div>Hello World</div>
+    <div>
+      <TableContent />
+    </div>
   )
 }

@@ -1,5 +1,4 @@
 import { Button, Callout, DropdownMenu, Flex, TextArea, TextField } from '@radix-ui/themes'
-import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
 import { createTask } from '../api/route';
 import { createTaskSchema } from '../validationSchemas';
@@ -10,7 +9,6 @@ const Form = () => {
     const [priorityValue, setPriorityValue] = useState('');
     const [error, setError] = useState('');
     const [taskSuccess, setTaskSuccess] = useState('');
-    const router = useRouter();
     const ref = useRef<HTMLFormElement>(null)
 
     const handleSelect = (data: any) => {
@@ -48,11 +46,6 @@ const Form = () => {
           setError("An unexpected error occurred.") 
         }
       }
-
-      // await createTask(formData)
-      // ref.current?.reset()
-      // setPriorityValue('');
-      // console.log("submitted task!")
     }
   return (
     <div className='max-w-xl'>

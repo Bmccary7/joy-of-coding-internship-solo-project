@@ -1,11 +1,15 @@
-import { getTasks } from "./api/route";
+import { getTasks, taskCount } from "./api/route";
 import TableContent from "./Components/TableContent";
 
-export default async function Home() {
-  const tasks = await getTasks();
+interface Props { searchParams: {search:string} }
+
+export default async function Home({searchParams}: Props) {
+  const { search } = searchParams;
+  const tasks = await getTasks(search);
+  const count = await taskCount();
   return (
     <div>
-      <TableContent tasks={tasks}/>
+      <TableContent tasks={tasks} count={count}/>
     </div>
   )
 }

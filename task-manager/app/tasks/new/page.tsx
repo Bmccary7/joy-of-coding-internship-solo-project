@@ -1,9 +1,12 @@
+'use client'
+
+import Form from '@/app/Components/form'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      New task page
+    <div className='flex justify-center'>
+      <Form />
     </div>
   )
 }

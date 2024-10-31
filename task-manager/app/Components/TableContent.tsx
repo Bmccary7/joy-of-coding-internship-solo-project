@@ -8,7 +8,7 @@ const TableContent = ({tasks}: any) => {
   const tableHeaders = ["ID", "Task Title", "Task Description", "Priority", "Date Created", "Last Updated"];
 
   return (
-    <div>
+    <div className='flex justify-center'>
       <Table.Root>
         <Table.Header>
           <Table.Row>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Callout, Flex, Table, TextField, useThemeContext } from '@radix-ui/themes'
+import { AlertDialog, Button, Callout, DropdownMenu, Flex, Table, TextField, useThemeContext } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
 import EditBtn from './EditBtn';
@@ -15,6 +15,7 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   const ref = useRef<HTMLFormElement>(null);
   const [error, setError] = useState('');
   const shownTasks = `(${shownCount} displayed)`;
+  const [filterValue, setFilterValue] = useState('No filter');
 
   const handleSearch = (formData: FormData) => {
     const searchInfo = formData.get("searchbar") as string;
@@ -29,9 +30,14 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   }
 
   const resetTable = () => {
+    setFilterValue('No filter');
     setError('');
     router.push("/");
     refreshDB
+  }
+
+  const handleFilter = (filter: any) => {
+    setFilterValue(filter);
   }
 
   return (
@@ -57,6 +63,22 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
             </TextField.Root>
           </form>
           <Button color='green' onClick={resetTable}>Refresh table</Button>
+          <Flex gap='3' justify='center'>
+            <p className='mt-1'>Sort By:</p>
+            <TextField.Root readOnly defaultValue={filterValue}>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button><DropdownMenu.TriggerIcon /></Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Item onSelect={() => handleFilter("No filter")}>No filter</DropdownMenu.Item>
+                  {(tableHeaders.slice(0, tableHeaders.length-1)).map((item) => 
+                    <DropdownMenu.Item key={item} onSelect={() => handleFilter(item)}>{item}</DropdownMenu.Item>
+                  )}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            </TextField.Root>
+          </Flex>
         </div>
       </div>
       <div className='flex justify-center'>

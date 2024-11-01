@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
 import EditBtn from './EditBtn';
 import DeleteBtn from './DeleteBtn';
+import { refreshDB } from '../api/route';
 
 const TableContent = ({tasks, totalCount, shownCount}: any) => {
 
@@ -13,7 +14,7 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const [error, setError] = useState('');
-  const shownTasks = `(${shownCount} displayed)`
+  const shownTasks = `(${shownCount} displayed)`;
 
   const handleSearch = (formData: FormData) => {
     const searchInfo = formData.get("searchbar") as string;
@@ -25,6 +26,12 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
       router.push("http://localhost:3000/?search=" + searchInfo.toLowerCase());
     }
 
+  }
+
+  const resetTable = () => {
+    setError('');
+    router.push("/");
+    refreshDB
   }
 
   return (
@@ -49,6 +56,7 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
               <Button>Search</Button>
             </TextField.Root>
           </form>
+          <Button color='green' onClick={resetTable}>Refresh table</Button>
         </div>
       </div>
       <div className='flex justify-center'>

@@ -62,3 +62,7 @@ export async function taskCount(){
     const numTasks = await prisma.task.count();
     return numTasks
 }
+
+export async function refreshDB(){
+    revalidatePath("@")
+}

@@ -4,6 +4,7 @@ import { Button, Callout, Flex, Table, TextField, useThemeContext } from '@radix
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
 import EditBtn from './EditBtn';
+import DeleteBtn from './DeleteBtn';
 
 const TableContent = ({tasks, count}: any) => {
 
@@ -60,7 +61,7 @@ const TableContent = ({tasks, count}: any) => {
             </Table.Header>
             <Table.Body>
               {tasks.map((task: any) => 
-                <Table.Row key={task.id}>
+                <Table.Row align='center' key={task.id}>
                   <Table.Cell>{task.id}</Table.Cell>
                   <Table.RowHeaderCell>{task.title}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>{task.description}</Table.RowHeaderCell>
@@ -68,7 +69,10 @@ const TableContent = ({tasks, count}: any) => {
                   <Table.RowHeaderCell>{task.createdAt.toLocaleString()}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>{task.updatedAt.toLocaleString()}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>
-                    <EditBtn task={task}/>
+                    <Flex align='center' gap='3'>
+                      <EditBtn task={task}/>
+                      <DeleteBtn task={task}/>
+                    </Flex>
                   </Table.RowHeaderCell>
                 </Table.Row>
               )}

@@ -51,8 +51,11 @@ export async function editTask(formData: FormData, id: any){
     revalidatePath("@/")
 }
 
-export async function deleteTask(){
-
+export async function deleteTask(id: any){
+    await prisma.task.delete({
+        where: {id}
+    })
+    revalidatePath("@/")
 }
 
 export async function taskCount(){

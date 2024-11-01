@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertDialog, Button, Callout, DropdownMenu, Flex, Table, TextField, useThemeContext } from '@radix-ui/themes'
+import { Button, Callout, DropdownMenu, Flex, Table, TextField } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
 import EditBtn from './EditBtn';
@@ -29,15 +29,24 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
 
   }
 
+  const handleFilter = (filter: any) => {
+    const newFilter = (filter).toLowerCase().replace(" ", "_");
+    if (filter == "No filter"){
+      router.push("/");
+      setFilterValue("No filter");
+    }else{
+      setFilterValue(filter);
+      router.push("http://localhost:3000/?filter=" + newFilter);
+      console.log(filter);
+    }
+
+  }
+
   const resetTable = () => {
     setFilterValue('No filter');
     setError('');
     router.push("/");
     refreshDB
-  }
-
-  const handleFilter = (filter: any) => {
-    setFilterValue(filter);
   }
 
   return (
@@ -64,7 +73,7 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
           </form>
           <Button color='green' onClick={resetTable}>Refresh table</Button>
           <Flex gap='3' justify='center'>
-            <p className='mt-1'>Sort By:</p>
+            <p className='mt-1'>Sort by:</p>
             <TextField.Root readOnly defaultValue={filterValue}>
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger>

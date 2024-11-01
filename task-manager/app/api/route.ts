@@ -3,27 +3,73 @@
 import prisma from "@/prisma/client"
 import { revalidatePath } from "next/cache"
 
-export async function getTasks(formData?: any){
+export async function getTasks(search?: any, filter?: unknown){
     let taskList
-    if (formData != null){
-        taskList = prisma.task.findMany({
+    if (search != null){
+        taskList = await prisma.task.findMany({
             where: {
                 OR: [
                     {
                         title: {
-                            contains: formData.toLowerCase(),
+                            contains: search.toLowerCase(),
                         }
                     }, {
                         description: {
-                            contains: formData.toLowerCase(),
+                            contains: search.toLowerCase(),
                         }
                     }
                 ]
             }
         })
         return taskList
+    }else if(filter != null){
+        if (filter === "id") {
+            taskList = await prisma.task.findMany({
+                orderBy: {
+                    id: 'asc'
+                }
+            })
+            return taskList;
+        }else if(filter === "task_title") {
+            taskList = await prisma.task.findMany({
+                orderBy: {
+                    title: 'asc'
+                }
+            })
+            return taskList;
+        }else if (filter === "task_description") {
+            taskList = await prisma.task.findMany({
+                orderBy: {
+                    description: 'asc'
+                }
+            })
+            return taskList;
+        }else if (filter === "priority") {
+            taskList = await prisma.task.findMany({
+                orderBy: {
+                    priority: 'asc'
+                }
+            })
+            return taskList;
+        }else if (filter === "date_created") {
+            taskList = await prisma.task.findMany({
+                orderBy: {
+                    createdAt: 'asc'
+                }
+            })
+            return taskList;
+        }else if (filter === "last_updated") {
+            taskList = await prisma.task.findMany({
+                orderBy: {
+                    updatedAt: 'asc'
+                }
+            })
+            return taskList;
+        }
+        taskList = await prisma.task.findMany();
+        return taskList;
     }else{
-        taskList = prisma.task.findMany();
+        taskList = await prisma.task.findMany();
         return taskList
     }
 }

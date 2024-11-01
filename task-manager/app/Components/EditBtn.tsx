@@ -56,7 +56,7 @@ const EditBtn = ({task}: any) => {
                                 <p>Currently Editing:</p>
                                 <Flex gap='2'>
                                     <Button type='button' onClick={restoreDefs}>Restore Defaults</Button>
-                                    <Button type='button' onClick={resetFields}>Clear</Button>
+                                    <Button type='button' onClick={resetFields}>Clear all</Button>
                                 </Flex>
                             </Flex>
                             <p className='mt-3 mb-2'>{task.title}</p>

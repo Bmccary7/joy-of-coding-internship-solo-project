@@ -67,8 +67,8 @@ const Form = () => {
         ref={ref}
         action={submitTask}
         className='max-w-xl space-y-3'>
-        <TextField.Root name="title"></TextField.Root>
-        <TextArea name="description"></TextArea>
+        <TextField.Root placeholder='Title' name="title"></TextField.Root>
+        <TextArea placeholder='Description' name="description"></TextArea>
         <Flex>
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger>

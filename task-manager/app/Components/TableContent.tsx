@@ -6,13 +6,14 @@ import React, { useRef, useState } from 'react'
 import EditBtn from './EditBtn';
 import DeleteBtn from './DeleteBtn';
 
-const TableContent = ({tasks, count}: any) => {
+const TableContent = ({tasks, totalCount, shownCount}: any) => {
 
   const tableHeaders = ["ID", "Task Title", "Task Description", "Priority", "Date Created", "Last Updated", "Edit/Delete"];
 
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const [error, setError] = useState('');
+  const shownTasks = `(${shownCount} displayed)`
 
   const handleSearch = (formData: FormData) => {
     const searchInfo = formData.get("searchbar") as string;
@@ -38,7 +39,7 @@ const TableContent = ({tasks, count}: any) => {
         }
       </Flex>
       <div className='flex justify-center space-x-10'>
-        <h1 className='pb-5 text-3xl'>Task total: {count}</h1>
+        <h1 className='pb-5 text-3xl'>Task total: {totalCount} {shownTasks}</h1>
         <div className='flex justify-center space-x-10'>
           <form 
           ref={ref}

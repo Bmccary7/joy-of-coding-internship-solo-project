@@ -9,7 +9,7 @@ export default async function Home({searchParams}: Props) {
   const count = await taskCount();
   return (
     <div>
-      <TableContent tasks={tasks} count={count}/>
+      <TableContent tasks={tasks} totalCount={count} shownCount={tasks.length}/>
     </div>
   )
 }

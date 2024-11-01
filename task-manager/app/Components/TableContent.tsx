@@ -68,7 +68,7 @@ const TableContent = ({tasks, count}: any) => {
                   <Table.RowHeaderCell>{task.createdAt.toLocaleString()}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>{task.updatedAt.toLocaleString()}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>
-                    <EditBtn />
+                    <EditBtn task={task}/>
                   </Table.RowHeaderCell>
                 </Table.Row>
               )}

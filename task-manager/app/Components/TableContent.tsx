@@ -3,10 +3,11 @@
 import { Button, Callout, Flex, Table, TextField, useThemeContext } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
+import EditBtn from './EditBtn';
 
 const TableContent = ({tasks, count}: any) => {
 
-  const tableHeaders = ["ID", "Task Title", "Task Description", "Priority", "Date Created", "Last Updated"];
+  const tableHeaders = ["ID", "Task Title", "Task Description", "Priority", "Date Created", "Last Updated", "Edit/Delete"];
 
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
@@ -66,6 +67,9 @@ const TableContent = ({tasks, count}: any) => {
                   <Table.RowHeaderCell>{task.priority}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>{task.createdAt.toLocaleString()}</Table.RowHeaderCell>
                   <Table.RowHeaderCell>{task.updatedAt.toLocaleString()}</Table.RowHeaderCell>
+                  <Table.RowHeaderCell>
+                    <EditBtn />
+                  </Table.RowHeaderCell>
                 </Table.Row>
               )}
             </Table.Body>

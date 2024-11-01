@@ -2,6 +2,8 @@
 
 import { Box, Button, DropdownMenu, Flex, Popover, TextArea, TextField } from '@radix-ui/themes'
 import React, { useRef, useState } from 'react'
+import { editTask } from '../api/route';
+import { setErrorMap } from 'zod';
 
 const EditBtn = ({task}: any) => {
     const prioList = ["Low", "Moderate", "High"];
@@ -31,6 +33,14 @@ const EditBtn = ({task}: any) => {
 
     }
 
+    const editEntry = async (formData: FormData) => {
+        try {
+            await editTask(formData, task.id);
+        } catch (error) {
+            console.log("Something went wrong.")
+        }
+    }
+
   return (
     <div className='pt-2 pb-2'>
         <Popover.Root>
@@ -40,7 +50,9 @@ const EditBtn = ({task}: any) => {
             <Popover.Content onCloseAutoFocus={resetFields}>
                 <Flex gap='3' pb='4'>
                     <Box>
-                        <form ref={ref}>
+                        <form 
+                        ref={ref}
+                        action={editEntry}>
                             <Flex gap='3' align='center' className='space-x-20'>
                                 <p>Currently Editing:</p>
                                 <Flex gap='2'>
@@ -49,9 +61,17 @@ const EditBtn = ({task}: any) => {
                                 </Flex>
                             </Flex>
                             <p className='mt-3 mb-2'>{task.title}</p>
-                            <TextArea placeholder='Edit title' defaultValue={titleValue}></TextArea>
+                            <TextArea 
+                            placeholder='Edit title' 
+                            defaultValue={titleValue}
+                            name='title'>
+                            </TextArea>
                             <p className='mt-3 mb-2'>{task.description}</p>
-                            <TextArea placeholder='Edit description' defaultValue={descValue}></TextArea>
+                            <TextArea 
+                            placeholder='Edit description' 
+                            defaultValue={descValue}
+                            name='description'>
+                            </TextArea>
                             <Flex gap='3' mt='3' mb='2'>
                                 <DropdownMenu.Root>
                                     <DropdownMenu.Trigger>
@@ -67,8 +87,8 @@ const EditBtn = ({task}: any) => {
                                     </DropdownMenu.Content>
                                 </DropdownMenu.Root>
                             </Flex>
-                            <TextField.Root readOnly value={prioValue}></TextField.Root>
-                            <Button mt='3' mr='3' asChild>
+                            <TextField.Root readOnly value={prioValue} name='priority'></TextField.Root>
+                            <Button mt='3' mr='3' type='submit' asChild>
                                 <Popover.Close>
                                     <Button>Confirm</Button>
                                 </Popover.Close>

@@ -4,6 +4,7 @@ import prisma from "@/prisma/client"
 import { revalidatePath } from "next/cache"
 
 export async function getTasks(search?: any, filter?: unknown){
+    const headerData = ["id", "task_title", "task_description", "priority", "date_created", "last_updated"];
     let taskList
     if (search != null){
         taskList = await prisma.task.findMany({

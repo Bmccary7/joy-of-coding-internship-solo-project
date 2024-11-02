@@ -23,6 +23,7 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
       setError("The search string cannot be empty!");
     }else{
       setError('');
+      setFilterValue('No filter');
       ref.current?.reset();
       router.push("http://localhost:3000/?search=" + searchInfo.toLowerCase());
     }

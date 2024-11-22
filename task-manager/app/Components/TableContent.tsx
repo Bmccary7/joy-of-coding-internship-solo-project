@@ -14,8 +14,10 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const [error, setError] = useState('');
+  const [searching, setSearching] = useState(false);
   const shownTasks = `(${shownCount} displayed)`;
   const [filterValue, setFilterValue] = useState('No filter');
+  const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = (formData: FormData) => {
     const searchInfo = formData.get("searchbar") as string;
@@ -23,6 +25,8 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
       setError("The search string cannot be empty!");
     }else{
       setError('');
+      setSearching(true);
+      setSearchValue(searchInfo);
       setFilterValue('No filter');
       ref.current?.reset();
       router.push("http://localhost:3000/?search=" + searchInfo.toLowerCase());
@@ -44,6 +48,8 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   }
 
   const resetTable = () => {
+    setSearching(false);
+    setSearchValue('');
     setFilterValue('No filter');
     setError('');
     router.push("/");
@@ -91,6 +97,9 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
           </Flex>
         </div>
       </div>
+      <Flex className='text-3xl' justify='center'>
+        {searching && `Displaying results for: ${searchValue}`}
+      </Flex>
       <div className='flex justify-center'>
           <Table.Root>
             <Table.Header>

@@ -37,9 +37,11 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   const handleFilter = (filter: any) => {
     const newFilter = (filter).toLowerCase().replace(" ", "_");
     if (filter == "No filter"){
+      setSearching(false);
       router.push("/");
       setFilterValue("No filter");
     }else{
+      setSearching(false);
       setFilterValue(filter);
       router.push("http://localhost:3000/?filter=" + newFilter);
       console.log(filter);

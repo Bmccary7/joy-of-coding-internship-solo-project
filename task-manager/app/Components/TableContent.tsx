@@ -10,6 +10,7 @@ import { refreshDB } from '../api/route';
 const TableContent = ({tasks, totalCount, shownCount}: any) => {
 
   const tableHeaders = ["ID", "Task Title", "Task Description", "Priority", "Date Created", "Last Updated", "Edit/Delete"];
+  const orderOptions = ["Ascending", "Descending"];
 
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
@@ -18,6 +19,11 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   const shownTasks = `(${shownCount} displayed)`;
   const [filterValue, setFilterValue] = useState('No filter');
   const [searchValue, setSearchValue] = useState('');
+  const [sortOrder, setSortOrder] = useState('Ascending');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterQuery, setFilterQuery] = useState('');
+  const [orderQuery, setOrderQuery] = useState('');
+  const paramString = "http://localhost:3000/?";
 
   const handleSearch = (formData: FormData) => {
     const searchInfo = formData.get("searchbar") as string;
@@ -28,8 +34,17 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
       setSearching(true);
       setSearchValue(searchInfo);
       setFilterValue('No filter');
+      setSearchQuery("search=" + searchInfo.toLocaleLowerCase());
       ref.current?.reset();
-      router.push("http://localhost:3000/?search=" + searchInfo.toLowerCase());
+      if (filterQuery === '' && orderQuery === ''){
+        router.push(paramString + "search=" + searchInfo.toLocaleLowerCase());
+      }else if (filterQuery != '' && orderQuery != ''){
+        router.push(paramString + "search=" + searchInfo.toLocaleLowerCase() + "&" + filterQuery + "&" + orderQuery);
+      }else if (filterQuery === '' && orderQuery != ''){
+        router.push(paramString + "search=" + searchInfo.toLocaleLowerCase() + "&" + orderQuery);
+      }else{
+        router.push(paramString + "search=" + searchInfo.toLocaleLowerCase() + "&" + filterQuery);
+      }
     }
 
   }
@@ -37,14 +52,41 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
   const handleFilter = (filter: any) => {
     const newFilter = (filter).toLowerCase().replace(" ", "_");
     if (filter == "No filter"){
-      setSearching(false);
       router.push("/");
       setFilterValue("No filter");
     }else{
-      setSearching(false);
       setFilterValue(filter);
-      router.push("http://localhost:3000/?filter=" + newFilter);
-      console.log(filter);
+      setFilterQuery("filter=" + newFilter);
+      if (searchQuery === '' && orderQuery === ''){
+        router.push(paramString + "filter=" + newFilter);
+      }else if (searchQuery != '' && orderQuery != ''){
+        router.push(paramString + searchQuery + "&filter=" + newFilter + "&" + orderQuery);
+      }else if (searchQuery === '' && orderQuery != ''){
+        router.push(paramString + "filter=" + newFilter + "&" + orderQuery);
+      }else{
+        router.push(paramString + searchQuery + "&filter=" + newFilter);
+      }
+    }
+
+  }
+
+  const handleOrder = (selectedOrder: any) => {
+    let abbrevOrder;
+    if (selectedOrder === "Ascending"){
+      abbrevOrder = 'asc';
+    }else{
+      abbrevOrder = 'desc';
+    }
+    setOrderQuery("order=" + abbrevOrder);
+    setSortOrder(selectedOrder);
+    if (searchQuery === '' && filterQuery === ''){
+      router.push(paramString + "order=" + abbrevOrder);
+    }else if (searchQuery != '' && filterQuery != ''){
+      router.push(paramString + searchQuery + "&" + filterQuery + "&order=" + abbrevOrder);
+    }else if (searchQuery === '' && filterQuery != ''){
+      router.push(paramString + filterQuery + "&order=" + abbrevOrder);
+    }else{
+      router.push(paramString + searchQuery + "&order=" + abbrevOrder);
     }
 
   }
@@ -53,6 +95,11 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
     setSearching(false);
     setSearchValue('');
     setFilterValue('No filter');
+    setSearching(false);
+    setSortOrder('Ascending');
+    setSearchQuery('');
+    setFilterQuery('');
+    setOrderQuery('');
     setError('');
     router.push("/");
     refreshDB
@@ -93,6 +140,21 @@ const TableContent = ({tasks, totalCount, shownCount}: any) => {
                   {(tableHeaders.slice(0, tableHeaders.length-1)).map((item) => 
                     <DropdownMenu.Item key={item} onSelect={() => handleFilter(item)}>{item}</DropdownMenu.Item>
                   )}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            </TextField.Root>
+          </Flex>
+          <Flex gap='3' justify='center'>
+            <p className='mt-1'>Order:</p>
+            <TextField.Root readOnly defaultValue={sortOrder}>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button><DropdownMenu.TriggerIcon /></Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  {(orderOptions.map((option) => 
+                    <DropdownMenu.Item key={option} onSelect={() => {handleOrder(option)}}>{option}</DropdownMenu.Item>
+                  ))}
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
             </TextField.Root>
